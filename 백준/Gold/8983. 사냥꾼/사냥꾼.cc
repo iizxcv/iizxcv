@@ -5,18 +5,8 @@
 using namespace std;
 
 /*
-사대의 위치 xi와 동물의 위치 (aj, bj) 간의 거리는 |xi-aj| + bj로 계산
-
-for 사대
-for y_distance > 0 클때까지, (i)
-x_range = y_distance - i
-for j = 사대 - x_range ; 사대 < x_rage * 2; j++;
-if(0 < j < j + (x_range  *2 )) // x좌표 범위 계산
-pos[i][j] 가 1이면 누적 +1
-
-입력: 사대수, 동물의 수, 사정거리
-입력2: 사대 위치 (y:0)
-입력3s : 동물 위치
+메모리 초과가 뜸
+shooting_range를 줄여서 메모리를 확보 해야 할 듯.
 */
 
 int main()
@@ -29,11 +19,11 @@ int main()
     cin >> a >> b >> c;
 
     vector<int> hunters(a, 0);
-    sort(hunters.begin(), hunters.end());
     for (int i = 0; i < a; i++)
     {
         cin >> hunters[i];
     }
+    sort(hunters.begin(), hunters.end());
     vector<tuple<int, int>> animals;
     for (int i = 0; i < b; i++)
     {
@@ -50,22 +40,30 @@ int main()
         max_x = max(max_x, tmp_x);
     }
 
-    vector<int> shooting_range(max_x + c, 0);
-    for (int i = 0; i < max_x + 1; i++)
-    {
-        for (int j = 0; j < hunters.size(); j++)
-        {
-            int h_pos = abs(i - hunters[j]);
-            shooting_range[i] = max(shooting_range[i], c - h_pos);
-        }
-    }
     // 동물을 순회해서 사격범위에 있으면 cnt++;
+    // 이분탐색으로 사대 위치 nlogn으로 찾은 다음 |xi-aj| + bj 계산식 활용
     for (auto [victim_x, victim_y] : animals)
     {
-        if (victim_y <= shooting_range[victim_x])
+        auto candidate_shoot_pos = lower_bound(hunters.begin(), hunters.end(), victim_x);
+        bool shooting = false;
+
+        if (candidate_shoot_pos != hunters.end())
         {
-            cnt++;
+            int distance = abs(*candidate_shoot_pos - victim_x) + victim_y;
+            if (distance <= c)
+                shooting = true;
         }
+
+        if (candidate_shoot_pos != hunters.begin())
+        {
+            // int distance = abs((*candidate_shoot_pos) - victim_x) + victim_y;
+            auto left_shooter = prev(candidate_shoot_pos);
+            int distance = abs(*left_shooter - victim_x) + victim_y;
+            if (distance <= c)
+                shooting = true;
+        }
+        if (shooting)
+            cnt++;
     }
     cout << cnt;
 }
