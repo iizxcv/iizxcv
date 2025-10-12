@@ -18,6 +18,7 @@ int main()
     vector<int> cp_arr = arr;
     sort(cp_arr.begin(), cp_arr.end());
     unordered_map<int, int> umap;
+    umap.reserve(n);
 
     int cnt = 0;
     for (int i = 0; i < cp_arr.size(); i++)
