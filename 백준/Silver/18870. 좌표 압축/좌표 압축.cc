@@ -12,7 +12,7 @@ void solution(std::vector<int> &arr)
 
     // for (int i = 0; i < arr.size(); i++)
     // {
-    //     auto it = find(copy_arr.begin(), copy_arr.end(), arr[i]);
+    // auto it = find(copy_arr.begin(), copy_arr.end(), arr[i]);
     //     if (it != copy_arr.end())
     //     {
     //         arr[i] = int(it - copy_arr.begin());
@@ -40,6 +40,9 @@ void solution(std::vector<int> &arr)
 
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
     int n;
     cin >> n;
 
